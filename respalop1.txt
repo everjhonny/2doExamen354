@@ -3,13 +3,13 @@ ini = 3
 gen = 1
 res = 10
 While ini <= Range("D1")
-For i = 1 To Range("D1")
-Range("B" & ini) = i
-Range("C" & ini) = Int((100 - 10 + 1) * Rnd() + 10)
-Range("D" & ini) = 1 + (Log(Range("C" & ini)) ^ 2)
-Range("E" & ini) = Range("C" & ini)
-ini = ini + 1
-If ini > Range("D1") + 2 Then Exit For
+ For i = 1 To Range("D1")
+ Range("B" & ini) = i
+ Range("C" & ini) = Int((100 - 10 + 1) * Rnd() + 10)
+ Range("D" & ini) = 1 + (Log(Range("C" & ini)) ^ 2)
+ Range("E" & ini) = Range("C" & ini)
+ ini = ini + 1
+ If ini > Range("D1") + 2 Then Exit For
 Next i
 Wend
 Convertir_Binario
@@ -17,13 +17,13 @@ Cruce
 Mutacion
 Convertir_Dec
 While gen < Range("K1")
-guarda_resultados (res)
-reemplaza_nuevos
-evalua_nuevos
-Convertir_Binario
-Cruce
-Mutacion
-Convertir_Dec
+ guarda_resultados (res)
+ reemplaza_nuevos
+ evalua_nuevos
+ Convertir_Binario
+ Cruce
+ Mutacion
+ Convertir_Dec
 gen = gen + 1
 res = res + 1
 Wend
