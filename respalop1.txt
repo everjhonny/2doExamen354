@@ -1,0 +1,133 @@
+Sub Macro1()
+ini = 3
+gen = 1
+res = 10
+While ini <= Range("D1")
+For i = 1 To Range("D1")
+Range("B" & ini) = i
+Range("C" & ini) = Int((100 - 10 + 1) * Rnd() + 10)
+Range("D" & ini) = 1 + (Log(Range("C" & ini)) ^ 2)
+Range("E" & ini) = Range("C" & ini)
+ini = ini + 1
+If ini > Range("D1") + 2 Then Exit For
+Next i
+Wend
+Convertir_Binario
+Cruce
+Mutacion
+Convertir_Dec
+While gen < Range("K1")
+guarda_resultados (res)
+reemplaza_nuevos
+evalua_nuevos
+Convertir_Binario
+Cruce
+Mutacion
+Convertir_Dec
+gen = gen + 1
+res = res + 1
+Wend
+'Range("B" & ini & ":" & "B5000").ClearContents
+'Range("C" & ini & ":" & "C5000").ClearContents
+'Range("D" & ini & ":" & "D5000").ClearContents
+'Range("E" & ini & ":" & "E5000").ClearContents
+
+End Sub
+Sub evalua_nuevos()
+For ini = 3 To (Range("D1") + 2)
+Range("E" & ini) = Range("C" & ini)
+If (Range("C" & ini) = 0) Then
+Range("D" & ini) = 0
+Else
+Range("D" & ini) = 1 + (Log(Range("C" & ini)) ^ 2)
+End If
+Next ini
+End Sub
+Sub guarda_resultados(col)
+For ini = 3 To (Range("D1") + 2)
+Cells(ini, col) = Range("I" & ini)
+Next ini
+End Sub
+Sub reemplaza_nuevos()
+For ini = 3 To (Range("D1") + 2)
+Range("C" & ini) = Range("I" & ini)
+Next ini
+End Sub
+Sub Mutacion()
+For ini = 3 To (Range("D1") + 2)
+For i = 0 To 8
+crt = Mid(Range("G" & ini), Range("I1"), 1)
+If (i = Range("I1")) Then
+If (crt = 1) Then
+Range("H" & ini) = Left(Range("G" & ini), Range("I1") - 1) & "0" & Right(Range("G" & ini), (8 - Range("I1")))
+Range("H" & ini).NumberFormat = "@"
+Else
+Range("H" & ini) = Left(Range("G" & ini), Range("I1") - 1) & "1" & Right(Range("G" & ini), (8 - Range("I1")))
+Range("H" & ini).NumberFormat = "@"
+End If
+End If
+Next i
+Next ini
+End Sub
+Sub Cruce()
+For ini = 3 To (Range("D1") + 2)
+If (ini Mod 2 = 1) Then
+Range("G" & ini) = Left(Range("F" & ini), Range("G1")) & Right(Range("F" & ini + 1), (Len(Range("F" & ini + 1)) - Range("G1")))
+Else
+Range("G" & ini) = Left(Range("F" & ini), Range("G1")) & Right(Range("F" & ini - 1), (Len(Range("F" & ini - 1)) - Range("G1")))
+End If
+Next ini
+End Sub
+Sub Ordenar()
+ With ActiveWorkbook.Worksheets("Hoja3").Sort
+        .SetRange Range("E2:E5000")
+        .Header = xlYes
+        .MatchCase = True
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+End Sub
+Sub Convertir_Binario()
+Ordenar
+For ini = 3 To (Range("D1") + 2)
+Range("F" & ini) = DecToBin(Range("E" & ini))
+Next ini
+Iguala_Digitos
+End Sub
+Sub Convertir_Dec()
+For ini = 3 To (Range("D1") + 2)
+Range("I" & ini) = BinToDec(Range("H" & ini))
+Next ini
+End Sub
+Sub Iguala_Digitos()
+For ini = 3 To (Range("D1") + 2)
+    tam = Len(Range("F" & ini))
+    If (tam < 8) Then
+    For i = 1 To (8 - tam)
+    Range("F" & ini) = "0" & Range("F" & ini)
+    Range("F" & ini).NumberFormat = "@"
+    Next i
+    End If
+Next ini
+End Sub
+Function DecToBin(ByVal n)
+    Do
+        DecToBin = n Mod 2 & DecToBin
+        n = n \ 2
+    Loop While n
+End Function
+Public Function BinToDec(Bin As String) As Long
+    Dim k As Long, t As Integer, s As Integer
+    t = Len(Bin)
+    If t > 32 Then
+        BinToDec = 0 'error
+    Else
+        s = 1: k = 1
+    If t > 31 And Left$(Bin, 1) = "1" Then s = -1: k = 2
+    For k = k To t
+        BinToDec = BinToDec + Val(Mid$(Bin, k, 1)) * 2 ^ (t - k)
+    Next
+    BinToDec = BinToDec * s
+    End If
+End Function
